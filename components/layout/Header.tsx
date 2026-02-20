@@ -15,6 +15,15 @@ const NAV = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // 스크롤 시 배경 전환 (맨 위: 투명, 스크롤 시: 반투명+블러)
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll(); // 초기값 (새로고침 시 스크롤 위치 반영)
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // 1120px 이상으로 커지면 모바일 메뉴 자동 닫기
   useEffect(() => {
@@ -34,7 +43,11 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50">
+    <header
+      className={`sticky top-0 z-50 min-h-[80px] transition-colors duration-200 ${
+        scrolled ? "bg-white/80 backdrop-blur-md" : "bg-white/60 backdrop-blur-sm"
+      }`}
+    >
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center">
           <Image

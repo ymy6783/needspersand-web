@@ -19,6 +19,15 @@
 }
 
 /* =========================
+   Typography Scale (Mobile / Tablet / PC)
+   H1: 30 / 36 / 48px
+   H2: 24 / 30 / 36px
+   H3: 20 / 24 / 30px
+   Body: 14 / 16 / 16px
+   Small: 12 / 14 / 14px
+========================= */
+
+/* =========================
    Base
 ========================= */
 
@@ -50,4 +59,42 @@ body {
   animation: floatAll 6s ease-in-out infinite;
   animation-delay: -1.5s;
   will-change: transform;
+}
+
+/* Governance section gradient wave */
+@keyframes gradientWave {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-wave {
+  background-size: 200% 200%;
+  animation: gradientWave 8s ease-in-out infinite;
+}
+
+/* News carousel infinite marquee */
+@keyframes newsMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-news-marquee {
+  animation: newsMarquee 30s linear infinite;
+}
+
+/* 스크롤바 숨김 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
