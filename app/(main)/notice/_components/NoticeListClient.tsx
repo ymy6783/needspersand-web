@@ -63,13 +63,15 @@ type Post = {
 function CardContent({
   post,
   asLink = true,
+  showAdminBadges = false,
 }: {
   post: Post;
   asLink?: boolean;
+  showAdminBadges?: boolean;
 }) {
   const inner = (
     <>
-      <div className="aspect-[16/9] w-full bg-neutral-100">
+      <div className="aspect-[16/9] w-full overflow-hidden rounded-t-2xl bg-neutral-100">
         {post.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -85,12 +87,12 @@ function CardContent({
       </div>
       <div className="p-5">
         <div className="mb-2 flex items-center gap-2 text-xs text-neutral-500">
-          <span className="rounded-full bg-neutral-800 px-2 py-0.5 font-medium text-white">
+          <span className="badge-category">
             {CATEGORY_LABEL[post.category ?? ""] ?? post.category}
           </span>
           <span>{formatDateKR(post.published_at)}</span>
-          {post.pinned && <span>📌</span>}
-          {isNew(post.created_at) && (
+          {showAdminBadges && post.pinned && <span>📌</span>}
+          {showAdminBadges && isNew(post.created_at) && (
             <span className="font-semibold text-orange-500">N</span>
           )}
         </div>
@@ -120,7 +122,7 @@ function CardContent({
 /* 고객용: 카드 (링크만) */
 function CustomerCard({ post }: { post: Post }) {
   return (
-    <div className="overflow-hidden rounded-2xl border bg-white">
+    <div className="card-border-shadow rounded-2xl bg-white">
       <CardContent post={post} />
     </div>
   );
@@ -156,7 +158,7 @@ function SortableAdminCard({
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative overflow-hidden rounded-2xl border bg-white ${
+      className={`card-border-shadow relative rounded-2xl bg-white ${
         isDragging ? "z-10 opacity-80 shadow-lg" : ""
       } ${isSelected ? "ring-2 ring-neutral-900" : ""}`}
     >
@@ -199,7 +201,7 @@ function SortableAdminCard({
           </svg>
         </button>
       </div>
-      <CardContent post={post} />
+      <CardContent post={post} showAdminBadges />
     </div>
   );
 }
@@ -381,7 +383,7 @@ export default function NoticeListClient({
 
       {/* 목록: 고객=카드 그리드, 관리자=드래그 가능 리스트 */}
       {posts.length === 0 ? (
-        <div className="rounded-2xl border p-12 text-center text-neutral-500">
+        <div className="card-border-shadow rounded-2xl p-12 text-center text-neutral-500">
           등록된 글이 없습니다.
         </div>
       ) : isAdmin ? (

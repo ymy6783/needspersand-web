@@ -38,7 +38,7 @@ export default async function NoticeDetailPage({
         <img
           src={post.image_url}
           alt=""
-          className="mt-6 w-full rounded-2xl border object-cover"
+          className="card-border-shadow mt-6 w-full rounded-2xl object-cover"
         />
       )}
 

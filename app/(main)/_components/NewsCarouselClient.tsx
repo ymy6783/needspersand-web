@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { createBrowserSupabase } from "@/lib/supabaseBrowser";
 
 type NewsCard = {
   id: string;
@@ -27,11 +29,11 @@ function isNew(createdAt?: string) {
   return diffHours <= 72;
 }
 
-function NewsCardItem({ n }: { n: NewsCard }) {
+function NewsCardItem({ n, isAdmin }: { n: NewsCard; isAdmin: boolean }) {
   return (
-    <Link href={`/notice/${n.id}`} className="shrink-0 snap-start">
-      <article className="w-[340px] overflow-hidden rounded-2xl border shadow-sm hover:bg-black/5 sm:w-[360px]">
-        <div className="relative aspect-[16/9] w-full bg-black/5">
+    <Link href={`/notice/${n.id}`} className="block shrink-0 snap-start">
+      <article className="card-border-shadow w-[280px] rounded-2xl transition hover:bg-black/5 sm:w-[320px] lg:w-[340px]">
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-2xl bg-black/5">
           {n.image_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -45,16 +47,14 @@ function NewsCardItem({ n }: { n: NewsCard }) {
             </div>
           )}
           <div className="absolute left-3 top-3">
-            <span className="rounded-full bg-neutral-800 px-2 py-1 text-[10px] font-medium text-white">
-              NEWS
-            </span>
+            <span className="badge-category">NEWS</span>
           </div>
         </div>
         <div className="flex min-h-[120px] flex-col p-5">
           <div className="mb-2 flex items-center gap-2 text-xs opacity-70">
             <span>{formatYM(n.published_at)}</span>
-            {n.pinned && <span>📌</span>}
-            {isNew(n.created_at) && <span className="font-semibold">N</span>}
+            {isAdmin && n.pinned && <span>📌</span>}
+            {isAdmin && isNew(n.created_at) && <span className="font-semibold">N</span>}
           </div>
           <div className="line-clamp-1 text-base font-semibold">{n.title}</div>
           <div className="mt-2 line-clamp-2 min-h-[2.5rem] text-sm opacity-70">
@@ -67,18 +67,49 @@ function NewsCardItem({ n }: { n: NewsCard }) {
 }
 
 export default function NewsCarouselClient({ news }: { news: NewsCard[] }) {
+  const [index, setIndex] = useState(0);
+  const [stepPx, setStepPx] = useState(344);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const total = news.length;
+
+  useEffect(() => {
+    createBrowserSupabase().auth.getSession().then(({ data }) => setIsAdmin(!!data.session));
+  }, []);
+
+  useEffect(() => {
+    if (total <= 1) return;
+    const t = setInterval(() => {
+      setIndex((i) => (i + 1) % total);
+    }, 4000);
+    return () => clearInterval(t);
+  }, [total]);
+
+  useEffect(() => {
+    const el = trackRef.current?.querySelector("article");
+    if (!el || total === 0) return;
+    const gap = 24;
+    const w = el.getBoundingClientRect().width;
+    setStepPx(w + gap);
+  }, [total, news]);
+
   if (news.length === 0) {
-    return <div className="text-sm opacity-60">등록된 뉴스가 없습니다.</div>;
+    return (
+      <div className="py-12 pl-6 text-sm opacity-60 lg:pl-0">
+        등록된 뉴스가 없습니다.
+      </div>
+    );
   }
 
-  // 무한 루프용 복제 (양쪽 방향 seamless)
-  const duplicated = [...news, ...news];
-
   return (
-    <div className="relative overflow-hidden">
-      <div className="flex w-max gap-6 animate-news-marquee">
-        {duplicated.map((n, idx) => (
-          <NewsCardItem key={`${n.id}-${idx}`} n={n} />
+    <div className="relative w-full overflow-hidden py-3">
+      <div
+        ref={trackRef}
+        className="flex gap-6 transition-transform duration-500 ease-out"
+        style={{ transform: `translateX(-${index * stepPx}px)` }}
+      >
+        {news.map((n) => (
+          <NewsCardItem key={n.id} n={n} isAdmin={isAdmin} />
         ))}
       </div>
     </div>

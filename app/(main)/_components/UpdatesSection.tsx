@@ -33,12 +33,11 @@ export default async function UpdatesSection() {
   ]);
 
   return (
-    <section className="w-full py-24">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-end">
-          {/* LEFT: 타이틀 + 전체보기 + 공지 1개(하단) */}
-          <div className="relative lg:col-span-4">
-            <h2 className="text-2xl font-semibold leading-tight md:text-3xl lg:text-4xl">
+    <section className="relative w-full overflow-hidden py-24">
+      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-[10%] sm:px-[8%] md:px-8 md:flex-row md:items-end md:gap-8 lg:px-6">
+        {/* LEFT: 타이틀 + 전체보기 + 공지 (다른 섹션과 동일 컨테이너) */}
+        <div className="relative flex min-w-[280px] max-w-[380px] flex-col justify-end pb-3 md:shrink-0">
+            <h2 className="text-3xl font-semibold leading-tight md:text-4xl lg:text-5xl">
               Updates <span className="text-orange-500">&amp;</span>
               <br />
               Disclosures
@@ -53,12 +52,10 @@ export default async function UpdatesSection() {
               {notice ? (
                 <Link
                   href={`/notice/${notice.id}`}
-                  className="block max-w-[280px] rounded-2xl border px-4 py-4 hover:bg-black/5"
+                  className="card-border-shadow block max-w-[280px] rounded-2xl px-4 py-4 hover:bg-black/5"
                 >
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="rounded-full bg-black px-2 py-0.5 text-[10px] font-medium text-white">
-                      NOTICE
-                    </span>
+                    <span className="badge-category">NOTICE</span>
                     <span className="text-xs opacity-60">{formatDateKR(notice.published_at)}</span>
                   </div>
 
@@ -69,19 +66,19 @@ export default async function UpdatesSection() {
                   </div>
                 </Link>
               ) : (
-                <div className="max-w-[280px] rounded-2xl border p-4 text-sm opacity-60">
+                <div className="card-border-shadow max-w-[280px] rounded-2xl p-4 text-sm opacity-60">
                   등록된 공지사항이 없습니다.
                 </div>
               )}
             </div>
           </div>
 
-          {/* RIGHT: 뉴스 카드 자동 슬라이드 (한 칸씩, 스크롤바 없음) */}
-          <div className="lg:col-span-8">
-            <div className="overflow-hidden">
-              <NewsCarouselClient news={news} />
-            </div>
-          </div>
+        {/* RIGHT: 뉴스 슬라이드만 우측 끝까지 확장 (나머지는 max-w-6xl에 맞춤) */}
+        <div
+          className="relative flex min-w-0 flex-1 flex-col justify-end overflow-hidden pb-3"
+          style={{ marginRight: "min(0px, calc((100vw - 1152px) / -2 - 24px))" }}
+        >
+          <NewsCarouselClient news={news} />
         </div>
       </div>
     </section>

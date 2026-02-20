@@ -12,7 +12,7 @@ export default function SectionGovernance() {
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-center gap-16 px-[10%] sm:px-[8%] md:flex-row md:items-center md:gap-24 md:px-8 lg:px-6">
         {/* LEFT: Governance Responsibility */}
         <div className="md:w-1/3">
-          <h2 className="text-2xl font-bold leading-tight text-white md:text-3xl lg:text-4xl">
+          <h2 className="text-3xl font-bold leading-tight text-white md:text-4xl lg:text-5xl">
             Governance
             <br />
             Responsibility

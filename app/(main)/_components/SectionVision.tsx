@@ -7,7 +7,7 @@ export default function SectionVision() {
         <div className="grid grid-cols-1 gap-16 md:grid-cols-12 md:gap-x-[100px] md:gap-y-12">
           {/* LEFT: Vision & Strategy / Why Blockchain */}
           <div className="md:col-span-5">
-            <h2 className="text-2xl font-semibold leading-[1.1] tracking-tight text-neutral-900 md:text-3xl lg:text-4xl">
+            <h2 className="text-3xl font-semibold leading-[1.1] tracking-tight text-neutral-900 md:text-4xl lg:text-5xl">
               Vision <span className="text-orange-500">&amp;</span> Strategy
             </h2>
             <p className="mt-6 text-base font-semibold text-neutral-800">Why Blockchain</p>

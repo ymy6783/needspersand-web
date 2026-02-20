@@ -9,7 +9,7 @@ export default function SectionOperate() {
         {/* 상단 타이틀 영역 */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
           <div className="md:col-span-4">
-            <h2 className="text-2xl font-semibold leading-[1.1] tracking-tight text-neutral-900 md:text-3xl lg:text-4xl">
+            <h2 className="text-3xl font-semibold leading-[1.1] tracking-tight text-neutral-900 md:text-4xl lg:text-5xl">
               What We
               <br />
               Operate
@@ -70,7 +70,7 @@ export default function SectionOperate() {
             </div>
 
             <h3 className="mt-0.5 text-2xl font-bold leading-tight text-[#333333] md:text-2xl md:font-semibold lg:text-3xl">
-              사용자 서비스
+              TOMATOK
             </h3>
 
             <p className="mt-4 text-sm font-normal leading-relaxed text-[#333333] md:text-base">
@@ -121,7 +121,7 @@ export default function SectionOperate() {
             </div>
 
             <h3 className="mt-0.5 text-2xl font-bold leading-tight text-[#333333] md:text-2xl md:font-semibold lg:text-3xl">
-              유틸리티 토큰
+            TOTT TOKEN
             </h3>
 
             <p className="mt-4 text-sm font-normal leading-relaxed text-[#333333] md:text-base">
@@ -172,7 +172,7 @@ export default function SectionOperate() {
             </div>
 
             <h3 className="mt-0.5 text-2xl font-bold leading-tight text-[#333333] md:text-2xl md:font-semibold lg:text-3xl">
-              토큰 참여 프로그램
+              TOTT STAKING
             </h3>
 
             <p className="mt-4 text-sm font-normal leading-relaxed text-[#333333] md:text-base">
