@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -80,8 +81,14 @@ function CardContent({
             className="h-full w-full object-cover"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-neutral-400">
-            이미지 없음
+          <div className="flex h-full w-full items-center justify-center bg-neutral-200">
+            <Image
+              src="/images/logos/logo.svg"
+              alt="NEEDS PERSAND"
+              width={100}
+              height={18}
+              className="brightness-0 invert opacity-60"
+            />
           </div>
         )}
       </div>

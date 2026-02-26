@@ -31,9 +31,6 @@ export default function Footer() {
         <div className="mt-8 border-t pt-8" style={{ borderTopWidth: 1, borderTopColor: "#DEDEDE" }}>
           <div className="text-sm text-neutral-500">
             <p className="font-medium text-neutral-700">(주)니즈퍼샌드</p>
-            <p className="mt-1">
-              서울시 강남구 테헤란로 151 (역삼동, 역삼하이츠빌딩) 5층 512호
-            </p>
             <a
               href="mailto:info@needspersand.co.kr"
               className="mt-1 block hover:text-neutral-900"
