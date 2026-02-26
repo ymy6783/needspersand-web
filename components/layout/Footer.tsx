@@ -10,8 +10,9 @@ export default function Footer() {
             <Image
               src="/images/logos/logo.svg"
               alt="NEEDS PERSAND"
-              width={180}
-              height={36}
+              width={126}
+              height={25}
+              className="grayscale"
             />
           </Link>
 
@@ -37,9 +38,6 @@ export default function Footer() {
             >
               info@needspersand.co.kr
             </a>
-            <p className="mt-2">
-              © {new Date().getFullYear()} Needspersand. 모든 권리 보유
-            </p>
           </div>
         </div>
       </div>

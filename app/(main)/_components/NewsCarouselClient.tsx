@@ -34,7 +34,7 @@ const CARD_GAP = 24; // gap-6
 
 function NewsCardItem({ n, isAdmin }: { n: NewsCard; isAdmin: boolean }) {
   return (
-    <Link href={`/notice/${n.id}`} className="block shrink-0 snap-start">
+    <Link href={`/notice/${n.id}`} className="block shrink-0">
       <article
         data-carousel-card
         className="card-border-shadow min-w-[280px] max-w-[280px] rounded-2xl transition hover:bg-black/5 sm:min-w-[320px] sm:max-w-[320px] lg:min-w-[340px] lg:max-w-[340px]"
@@ -83,14 +83,13 @@ export default function NewsCarouselClient({ news }: { news: NewsCard[] }) {
   const [stepPx, setStepPx] = useState(280 + CARD_GAP);
   const [isAdmin, setIsAdmin] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const total = news.length;
 
   const measureStep = useCallback(() => {
     const el = trackRef.current?.querySelector("[data-carousel-card]");
     if (!el) return;
     const w = el.getBoundingClientRect().width;
-    setStepPx(Math.round(w) + CARD_GAP);
+    if (w > 0) setStepPx(Math.round(w) + CARD_GAP);
   }, []);
 
   useEffect(() => {
@@ -113,13 +112,6 @@ export default function NewsCarouselClient({ news }: { news: NewsCard[] }) {
     return () => clearInterval(t);
   }, [total]);
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el || total === 0) return;
-    const x = Math.min(index * stepPx, (total - 1) * stepPx);
-    el.scrollTo({ left: x, behavior: "auto" });
-  }, [index, stepPx, total]);
-
   if (news.length === 0) {
     return (
       <div className="py-12 pl-6 text-sm opacity-60 lg:pl-0">
@@ -129,14 +121,11 @@ export default function NewsCarouselClient({ news }: { news: NewsCard[] }) {
   }
 
   return (
-    <div
-      ref={scrollRef}
-      className="scrollbar-hide -mx-6 w-[calc(100%+48px)] snap-x snap-mandatory overflow-x-auto overflow-y-hidden py-3 md:mx-0 md:w-full"
-    >
+    <div className="relative w-full overflow-hidden py-3">
       <div
         ref={trackRef}
-        className="flex w-max gap-6 px-6 md:px-0"
-        style={{ width: "max-content" }}
+        className="flex gap-6 transition-transform duration-150 ease-out"
+        style={{ transform: `translateX(-${index * stepPx}px)` }}
       >
         {news.map((n) => (
           <NewsCardItem key={n.id} n={n} isAdmin={isAdmin} />
