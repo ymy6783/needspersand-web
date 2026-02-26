@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const NAV = [
@@ -14,8 +14,17 @@ const NAV = [
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const isMain = pathname === "/";
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (isMain) {
+      e.preventDefault();
+      window.location.reload();
+    }
+  };
 
   // 스크롤 시 배경 전환 (맨 위: 투명, 스크롤 시: 반투명+블러)
   useEffect(() => {
@@ -49,7 +58,12 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center">
+        <a
+          href="/"
+          onClick={handleLogoClick}
+          className="flex items-center"
+          aria-label={isMain ? "새로고침" : "메인으로"}
+        >
           <Image
             src="/images/logos/logo.svg"
             alt="NEEDS PERSAND"
@@ -57,7 +71,7 @@ export default function Header() {
             height={44}
             priority
           />
-        </Link>
+        </a>
 
         {/* Desktop nav: 1120px 이상에서만 보이기 */}
         <nav className="hidden items-center gap-14 text-[15px] text-neutral-800 min-[1120px]:flex">

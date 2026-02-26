@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type TimelineEvent = {
   quarter: string;
@@ -98,63 +98,47 @@ const TIMELINE_DATA: YearGroup[] = [
   },
 ];
 
-// 곡선 트랙 상의 점 좌표 (0~1, 0=맨위 1=맨아래)
-function getArcPoint(t: number, width: number, height: number) {
-  const angle = Math.PI * 0.7 - t * Math.PI * 0.6; // 왼쪽 세그먼트
-  const r = Math.min(width, height) * 1.1;
-  const cx = width * 0.55;
-  const cy = height * 0.5;
-  const x = cx - Math.cos(angle) * r * 0.45;
-  const y = cy - Math.sin(angle) * r * 0.45;
-  const rot = (angle - Math.PI / 2) * (180 / Math.PI);
-  return { x, y, rot };
-}
-
 export default function SectionTimeline() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(3);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const startY = useRef(0);
-  const startIndex = useRef(3);
+  const scrollTop = useRef(0);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     setIsDragging(true);
     startY.current = e.clientY;
-    startIndex.current = activeIndex;
+    scrollTop.current = scrollRef.current?.scrollTop ?? 0;
     (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-  }, [activeIndex]);
+  }, []);
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
-      if (!isDragging) return;
+      if (!isDragging || !scrollRef.current) return;
       const dy = startY.current - e.clientY;
-      const threshold = 50;
-      let newIndex = startIndex.current;
-      if (dy > threshold) {
-        newIndex = Math.max(0, startIndex.current - 1);
-      } else if (dy < -threshold) {
-        newIndex = Math.min(3, startIndex.current + 1);
-      }
-      setActiveIndex(newIndex);
+      scrollRef.current.scrollTop = scrollTop.current + dy;
+      startY.current = e.clientY;
+      scrollTop.current = scrollRef.current.scrollTop;
     },
     [isDragging]
   );
 
   const handlePointerUp = useCallback(() => setIsDragging(false), []);
 
-  const handleYearClick = useCallback((index: number) => {
-    setActiveIndex(index);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollToBottom = () => {
+      el.scrollTop = el.scrollHeight;
+    };
+    scrollToBottom();
+    requestAnimationFrame(scrollToBottom);
   }, []);
-
-  const activeGroup = TIMELINE_DATA[activeIndex] ?? TIMELINE_DATA[3];
-  const trackW = 160;
-  const trackH = 320;
 
   return (
     <section id="timeline" className="w-full bg-[#f5f2ed] py-28">
-      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-[10%] sm:px-[8%] md:flex-row md:items-center md:gap-16 md:px-8 lg:px-6">
+      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-[10%] sm:px-[8%] md:flex-row md:items-stretch md:gap-12 md:px-8 lg:px-6">
         {/* LEFT: 타이틀 */}
-        <div className="shrink-0 md:w-[200px]">
+        <div className="shrink-0 md:w-1/3">
           <h2 className="text-3xl font-semibold leading-[1.1] tracking-tight text-neutral-900 md:text-4xl lg:text-5xl">
             Milestones <span className="text-orange-500">&amp;</span>
             <br />
@@ -162,98 +146,88 @@ export default function SectionTimeline() {
           </h2>
         </div>
 
-        {/* CENTER + RIGHT: 곡선 트랙 + 연도 + 콘텐츠 */}
-        <div className="flex flex-1 flex-col gap-8 md:flex-row md:items-stretch md:gap-12">
-          {/* 곡선 트랙 + 연도 (이미지처럼 왼쪽 곡선) */}
+        {/* RIGHT: 세로 스크롤 타임라인 */}
+        <div className="relative flex-1">
           <div
-            ref={trackRef}
+            ref={scrollRef}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
-            className={`relative h-[320px] w-full shrink-0 md:w-[200px] ${
+            className={`timeline-scroll relative h-[420px] overflow-y-auto overflow-x-hidden rounded-3xl py-14 scrollbar-hide ${
               isDragging ? "cursor-grabbing" : "cursor-grab"
             }`}
+            style={{
+              maskImage:
+                "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
+            }}
           >
-            {/* 곡선 트랙 SVG */}
-            <svg
-              viewBox={`0 0 ${trackW} ${trackH}`}
-              className="absolute inset-0 h-full w-full"
-              aria-hidden
-            >
-              <path
-                d={`M ${trackW * 0.25} ${trackH * 0.08} Q ${trackW * 0.9} ${trackH * 0.15} ${trackW * 0.7} ${trackH * 0.5} Q ${trackW * 0.5} ${trackH * 0.85} ${trackW * 0.35} ${trackH * 0.92}`}
-                fill="none"
-                stroke="#d4d4d4"
-                strokeWidth="2"
-                strokeLinecap="round"
+            <div className="relative flex gap-8 px-2">
+              {/* 세로선 */}
+              <div
+                className="absolute left-[120px] top-0 bottom-0 w-px bg-neutral-400 md:left-[124px]"
+                aria-hidden
               />
-            </svg>
 
-            {/* 연도 숫자 - 곡선 따라 배치 */}
-            {TIMELINE_DATA.map((group, i) => {
-              const t = i / (TIMELINE_DATA.length - 1);
-              const { x, y, rot } = getArcPoint(t, trackW, trackH);
-              const isActive = i === activeIndex;
-              return (
-                <button
-                  key={group.year}
-                  type="button"
-                  onClick={() => handleYearClick(i)}
-                  className="absolute left-0 top-0 flex items-center justify-end gap-2 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2"
-                  style={{
-                    transform: `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${rot}deg)`,
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${group.year}년`}
-                >
-                  {isActive && (
-                    <span
-                      className="absolute right-full top-1/2 mr-2 h-1.5 w-1.5 -translate-y-1/2 shrink-0 rounded-full bg-neutral-800"
-                      aria-hidden
-                    />
-                  )}
-                  <span
-                    className="inline-block tabular-nums transition-all duration-200"
-                    style={{
-                      transform: `rotate(${-rot}deg)`,
-                      fontSize: isActive ? "1.75rem" : "1rem",
-                      fontWeight: isActive ? 700 : 500,
-                      color: isActive ? "#262626" : "#a3a3a3",
-                    }}
+              <div className="flex w-full flex-col">
+                {TIMELINE_DATA.map((group) => (
+                  <div
+                    key={group.year}
+                    className="flex items-start gap-10 py-10 first:pt-2 last:pb-2"
                   >
-                    {group.year.slice(2)}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+                    <div className="flex w-[60px] shrink-0 items-start pt-0.5">
+                      <span className="text-2xl font-bold text-neutral-900 md:text-3xl">
+                        {group.year}
+                      </span>
+                    </div>
 
-          {/* 우측: 선택된 연도의 이벤트만 (이미지처럼 제목+설명) */}
-          <div className="min-h-[200px] flex-1 pl-0 md:min-h-[320px] md:pl-4">
-            <div className="space-y-6">
-              {activeGroup.events.map((evt, i) => (
-                <div key={`${activeGroup.year}-${evt.quarter}-${i}`}>
-                  <p className="text-lg font-semibold text-neutral-900 md:text-xl">
-                    {evt.title}
-                    {evt.link && (
-                      <a
-                        href={evt.link}
-                        className="ml-1 inline-flex text-neutral-500 hover:text-orange-500"
-                        aria-label="링크"
-                      >
-                        ↗
-                      </a>
-                    )}
-                  </p>
-                  <p className="mt-1 text-sm text-neutral-500 md:text-base">
-                    {evt.quarter}
-                    {evt.bullets && evt.bullets.length > 0 && (
-                      <> · {evt.bullets.join(", ")}</>
-                    )}
-                  </p>
-                </div>
-              ))}
+                    <div className="relative flex-1 min-w-0 pl-10">
+                      <div className="space-y-6">
+                        {group.events.map((evt, i) => (
+                          <div
+                            key={`${group.year}-${evt.quarter}-${i}`}
+                            className="relative flex pl-6"
+                          >
+                            <div
+                              className="absolute left-0 top-1.5 h-2.5 w-2.5 -translate-x-[33px] shrink-0 rounded-full bg-neutral-700 md:-translate-x-[29px]"
+                              aria-hidden
+                            />
+                            <div>
+                              <span className="text-xs font-medium text-neutral-500">
+                                {evt.quarter}
+                              </span>
+                              <p className="mt-1 text-sm font-medium text-neutral-900 md:text-base">
+                                {evt.title}
+                                {evt.link && (
+                                  <a
+                                    href={evt.link}
+                                    className="ml-1 inline-flex text-neutral-500 hover:text-orange-500"
+                                    aria-label="링크"
+                                  >
+                                    ↗
+                                  </a>
+                                )}
+                              </p>
+                              {evt.bullets && evt.bullets.length > 0 && (
+                                <ul className="mt-2 space-y-1 text-xs text-neutral-600 md:text-sm">
+                                  {evt.bullets.map((b, j) => (
+                                    <li key={j} className="flex gap-2">
+                                      <span className="text-neutral-400">-</span>
+                                      {b}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
