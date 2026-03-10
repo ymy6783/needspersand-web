@@ -26,8 +26,8 @@ export default function SectionOperate() {
           </div>
         </div>
 
-        {/* 카드 3개 */}
-        <div className="mt-20 grid grid-cols-1 gap-16 md:gap-12 md:grid-cols-2 lg:grid-cols-3">
+        {/* 카드 3개: 모바일 1열, 테블릿 이상 3열 */}
+        <div className="mt-20 grid grid-cols-1 gap-16 sm:grid-cols-3 sm:gap-12">
           {/* 카드 1 - 사용자 서비스 */}
           <div className="text-center">
             <div className="relative aspect-square w-full">
@@ -69,24 +69,24 @@ export default function SectionOperate() {
               </div>
             </div>
 
-            <h3 className="mt-0.5 text-2xl font-bold leading-tight text-[#333333] md:text-2xl md:font-semibold lg:text-3xl">
-              TOMATOK
-            </h3>
-
-            <p className="mt-4 text-sm font-normal leading-relaxed text-[#333333] md:text-base">
-              토마톡은 사용자 간 소통을 중심으로 설계된
-              <br />
-              커뮤니케이션 서비스입니다.
-            </p>
-            <p className="mt-2 text-sm font-normal leading-relaxed text-[#666666] md:text-base">
-              현재 다운로드 후 사용 가능하며,
-              <br />
-              실제 사용자 대상 서비스로 운영 중입니다.
-            </p>
-
-            <Link href="#" className="mt-4 inline-block text-sm font-normal text-[#333333] hover:opacity-70 md:text-base">
-              토마톡 바로가기 →
-            </Link>
+            <div className="mx-auto max-w-[300px]">
+              <h3 className="mt-0.5 text-2xl font-bold leading-tight text-[#333333] md:text-2xl md:font-semibold lg:text-3xl">
+                TOMATOK
+              </h3>
+              <p className="mt-4 text-sm font-normal leading-relaxed text-[#333333] md:text-base">
+                토마톡은 사용자 간 소통을 중심으로 설계된
+                <br />
+                커뮤니케이션 서비스입니다.
+              </p>
+              <p className="mt-2 text-sm font-normal leading-relaxed text-[#666666] md:text-base">
+                현재 다운로드 후 사용 가능하며,
+                <br />
+                실제 사용자 대상 서비스로 운영 중입니다.
+              </p>
+              <Link href="#" className="mt-4 inline-block text-[11.2px] font-normal text-[#333333] hover:opacity-70">
+                토마톡 바로가기 →
+              </Link>
+            </div>
           </div>
 
           {/* 카드 2 - 유틸리티 토큰 */}
@@ -120,24 +120,24 @@ export default function SectionOperate() {
               </div>
             </div>
 
-            <h3 className="mt-0.5 text-2xl font-bold leading-tight text-[#333333] md:text-2xl md:font-semibold lg:text-3xl">
-            TOTT TOKEN
-            </h3>
-
-            <p className="mt-4 text-sm font-normal leading-relaxed text-[#333333] md:text-base">
-              TOTT는 토마톡 서비스 운영을 지원하기 위해
-              <br />
-              설계된 유틸리티 토큰입니다.
-            </p>
-            <p className="mt-2 text-sm font-normal leading-relaxed text-[#666666] md:text-base">
-              온체인에 배포되어 있으며,
-              <br />
-              서비스 구조 내에서 역할을 수행합니다.
-            </p>
-
-            <Link href="#" className="mt-4 inline-block text-sm font-normal text-[#333333] hover:opacity-70 md:text-base">
-              TOTT 바로가기 →
-            </Link>
+            <div className="mx-auto max-w-[300px]">
+              <h3 className="mt-0.5 text-2xl font-bold leading-tight text-[#333333] md:text-2xl md:font-semibold lg:text-3xl">
+                TOTT TOKEN
+              </h3>
+              <p className="mt-4 text-sm font-normal leading-relaxed text-[#333333] md:text-base">
+                TOTT는 토마톡 서비스 운영을 지원하기 위해
+                <br />
+                설계된 유틸리티 토큰입니다.
+              </p>
+              <p className="mt-2 text-sm font-normal leading-relaxed text-[#666666] md:text-base">
+                온체인에 배포되어 있으며,
+                <br />
+                서비스 구조 내에서 역할을 수행합니다.
+              </p>
+              <Link href="#" className="mt-4 inline-block text-[11.2px] font-normal text-[#333333] hover:opacity-70">
+                TOTT 바로가기 →
+              </Link>
+            </div>
           </div>
 
           {/* 카드 3 - 토큰 참여 프로그램 */}
@@ -171,24 +171,24 @@ export default function SectionOperate() {
               </div>
             </div>
 
-            <h3 className="mt-0.5 text-2xl font-bold leading-tight text-[#333333] md:text-2xl md:font-semibold lg:text-3xl">
-              TOTT STAKING
-            </h3>
-
-            <p className="mt-4 text-sm font-normal leading-relaxed text-[#333333] md:text-base">
-              스테이킹 프로그램은 TOTT 토큰을 기반으로 한
-              <br />
-              참여 메커니즘입니다.
-            </p>
-            <p className="mt-2 text-sm font-normal leading-relaxed text-[#666666] md:text-base">
-              프로그램은 실제로 운영 중이며,
-              <br />
-              기능 수행 목적의 구조로 설계되었습니다.
-            </p>
-
-            <Link href="#" className="mt-4 inline-block text-sm font-normal text-[#333333] hover:opacity-70 md:text-base">
-              스테이킹 바로가기 →
-            </Link>
+            <div className="mx-auto max-w-[300px]">
+              <h3 className="mt-0.5 text-2xl font-bold leading-tight text-[#333333] md:text-2xl md:font-semibold lg:text-3xl">
+                TOTT STAKING
+              </h3>
+              <p className="mt-4 text-sm font-normal leading-relaxed text-[#333333] md:text-base">
+                스테이킹 프로그램은 TOTT 토큰을 기반으로 한
+                <br />
+                참여 메커니즘입니다.
+              </p>
+              <p className="mt-2 text-sm font-normal leading-relaxed text-[#666666] md:text-base">
+                프로그램은 실제로 운영 중이며,
+                <br />
+                기능 수행 목적의 구조로 설계되었습니다.
+              </p>
+              <Link href="#" className="mt-4 inline-block text-[11.2px] font-normal text-[#333333] hover:opacity-70">
+                스테이킹 바로가기 →
+              </Link>
+            </div>
           </div>
         </div>
       </div>

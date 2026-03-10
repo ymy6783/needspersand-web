@@ -144,6 +144,42 @@ export default function SectionTimeline() {
             <br />
             Timeline
           </h2>
+          {/* 세로 스크롤 안내 (반투명, 타이틀 아래) */}
+          <p
+            className="mt-4 flex items-center gap-2 text-sm text-neutral-500 opacity-50"
+            style={{ pointerEvents: "none" }}
+            aria-hidden
+          >
+            <span className="inline-flex flex-col animate-scroll-hint">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m18 15-6-6-6 6" />
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </span>
+            <span>위아래로 움직이세요</span>
+          </p>
         </div>
 
         {/* RIGHT: 세로 스크롤 타임라인 */}

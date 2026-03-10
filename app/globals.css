@@ -95,6 +95,15 @@ body {
   animation: newsMarquee 25s linear infinite;
 }
 
+/* 타임라인 스크롤 안내 위아래 움직임 */
+@keyframes scrollHint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+.animate-scroll-hint {
+  animation: scrollHint 2s ease-in-out infinite;
+}
+
 /* 카드 공통: border 1px #DEDEDE, 하단 그림자 */
 .card-border-shadow {
   border: 1px solid #DEDEDE;
