@@ -135,7 +135,7 @@ export default function SectionTimeline() {
   }, []);
 
   return (
-    <section id="timeline" className="w-full bg-[#f5f2ed] py-28">
+    <section id="timeline" className="scroll-mt-24 w-full bg-[#f5f2ed] py-28">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-[10%] sm:px-[8%] md:flex-row md:items-stretch md:gap-12 md:px-8 lg:px-6">
         {/* LEFT: 타이틀 */}
         <div className="shrink-0 md:w-1/3">
@@ -178,7 +178,7 @@ export default function SectionTimeline() {
                     className="flex items-start gap-10 py-10 first:pt-2 last:pb-2"
                   >
                     <div className="flex w-[60px] shrink-0 items-start pt-0.5">
-                      <span className="text-2xl font-bold text-neutral-900 md:text-3xl">
+                      <span className="text-[1.2rem] font-bold text-neutral-900 md:text-3xl">
                         {group.year}
                       </span>
                     </div>

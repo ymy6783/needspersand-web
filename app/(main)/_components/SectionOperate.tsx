@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function SectionOperate() {
   return (
-    <section id="operate" className="w-full bg-white py-28">
+    <section id="operate" className="scroll-mt-24 w-full bg-white py-28">
       <div className="mx-auto max-w-6xl px-[10%] sm:px-[8%] md:px-8 lg:px-6">
         {/* 상단 타이틀 영역 */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12">

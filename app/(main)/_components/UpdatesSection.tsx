@@ -33,7 +33,7 @@ export default async function UpdatesSection() {
   ]);
 
   return (
-    <section className="relative w-full overflow-hidden py-24">
+    <section id="news" className="relative scroll-mt-24 w-full overflow-hidden py-24">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-[10%] sm:px-[8%] md:px-8 md:flex-row md:items-end md:gap-8 lg:px-6">
         {/* LEFT: 타이틀 + 전체보기 + 공지 (다른 섹션과 동일 컨테이너) */}
         <div className="relative flex min-w-[280px] max-w-[380px] flex-col justify-end pb-3 md:shrink-0">

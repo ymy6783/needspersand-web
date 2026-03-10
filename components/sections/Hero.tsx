@@ -3,7 +3,7 @@ const features = ["Stability", "User Focus", "Integration"];
 const ICON_SRC = "/images/icons/hero-moon-icon.png";
 export default function Hero() {
     return (
-        <section className="relative overflow-hidden">
+        <section id="about" className="relative scroll-mt-24 overflow-hidden">
             {/* 배경 그라데이션 */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#dfeeff] via-white to-[#fde7dd]" />
 

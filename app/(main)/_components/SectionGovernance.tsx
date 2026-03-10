@@ -2,7 +2,7 @@ export default function SectionGovernance() {
   return (
     <section
       id="governance"
-      className="relative w-full overflow-hidden py-28"
+      className="relative w-full overflow-hidden py-28 scroll-mt-24"
       style={{
         background: "linear-gradient(90deg, #FF4500 0%, #FFA600 50%, #FF4500 100%)",
         backgroundSize: "200% 100%",

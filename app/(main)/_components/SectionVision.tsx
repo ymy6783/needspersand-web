@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function SectionVision() {
   return (
-    <section id="vision" className="w-full bg-[#f5f2ed] py-28">
+    <section id="vision" className="scroll-mt-24 w-full bg-[#f5f2ed] py-28">
       <div className="mx-auto max-w-6xl px-[10%] sm:px-[8%] md:px-8 lg:px-6">
         <div className="grid grid-cols-1 gap-16 md:grid-cols-12 md:gap-x-[100px] md:gap-y-12">
           {/* LEFT: Vision & Strategy / Why Blockchain */}
@@ -34,7 +34,7 @@ export default function SectionVision() {
                   alt=""
                   width={120}
                   height={120}
-                  className="object-contain"
+                  className="h-[84px] w-[84px] object-contain md:h-[120px] md:w-[120px]"
                 />
               </div>
               <div className="flex-1">
@@ -57,7 +57,7 @@ export default function SectionVision() {
                   alt=""
                   width={120}
                   height={120}
-                  className="object-contain"
+                  className="h-[84px] w-[84px] object-contain md:h-[120px] md:w-[120px]"
                 />
               </div>
               <div className="flex-1">
@@ -80,7 +80,7 @@ export default function SectionVision() {
                   alt=""
                   width={120}
                   height={120}
-                  className="object-contain"
+                  className="h-[84px] w-[84px] object-contain md:h-[120px] md:w-[120px]"
                 />
               </div>
               <div className="flex-1">

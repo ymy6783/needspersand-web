@@ -78,11 +78,19 @@ function NewsCardItem({ n, isAdmin }: { n: NewsCard; isAdmin: boolean }) {
   );
 }
 
+const DRAG_THRESHOLD = 40;
+
 export default function NewsCarouselClient({ news }: { news: NewsCard[] }) {
   const [index, setIndex] = useState(0);
   const [stepPx, setStepPx] = useState(280 + CARD_GAP);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
+  const startXRef = useRef(0);
+  const captureTargetRef = useRef<HTMLElement | null>(null);
+  const pointerIdRef = useRef<number | null>(null);
+  const isDraggingRef = useRef(false);
+  const justDraggedRef = useRef(false);
   const total = news.length;
 
   const measureStep = useCallback(() => {
@@ -90,6 +98,69 @@ export default function NewsCarouselClient({ news }: { news: NewsCard[] }) {
     if (!el) return;
     const w = el.getBoundingClientRect().width;
     if (w > 0) setStepPx(Math.round(w) + CARD_GAP);
+  }, []);
+
+  const goToIndex = useCallback(
+    (i: number) => {
+      setIndex(Math.max(0, Math.min(i, total - 1)));
+    },
+    [total]
+  );
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    startXRef.current = e.clientX;
+    isDraggingRef.current = true;
+    justDraggedRef.current = false;
+    captureTargetRef.current = e.target as HTMLElement;
+    pointerIdRef.current = e.pointerId;
+    captureTargetRef.current.setPointerCapture?.(e.pointerId);
+  }, []);
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!isDraggingRef.current || total <= 1) return;
+      const delta = e.clientX - startXRef.current;
+      const maxDrag = stepPx * 0.5;
+      setDragOffset(Math.max(-maxDrag, Math.min(maxDrag, delta)));
+    },
+    [total, stepPx]
+  );
+
+  const handlePointerUp = useCallback(
+    (e?: React.PointerEvent) => {
+      if (!isDraggingRef.current) return;
+      isDraggingRef.current = false;
+      const pid = e?.pointerId ?? pointerIdRef.current;
+      if (captureTargetRef.current && pid != null) {
+        captureTargetRef.current.releasePointerCapture?.(pid);
+      }
+      captureTargetRef.current = null;
+      pointerIdRef.current = null;
+      const offset = dragOffset;
+      setDragOffset(0);
+
+      if (offset < -DRAG_THRESHOLD) {
+        goToIndex(index + 1);
+        justDraggedRef.current = true;
+      } else if (offset > DRAG_THRESHOLD) {
+        goToIndex(index - 1);
+        justDraggedRef.current = true;
+      }
+    },
+    [dragOffset, index, goToIndex]
+  );
+
+  const handlePointerCancel = useCallback(() => {
+    isDraggingRef.current = false;
+    setDragOffset(0);
+  }, []);
+
+  const handleClickCapture = useCallback((e: React.MouseEvent) => {
+    if (justDraggedRef.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      justDraggedRef.current = false;
+    }
   }, []);
 
   useEffect(() => {
@@ -120,12 +191,23 @@ export default function NewsCarouselClient({ news }: { news: NewsCard[] }) {
     );
   }
 
+  const transformX = -(index * stepPx) + dragOffset;
+
   return (
-    <div className="relative w-full overflow-hidden py-3">
+    <div
+      className="relative w-full cursor-grab overflow-hidden py-3 active:cursor-grabbing"
+      style={{ touchAction: "pan-y" }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={(e) => handlePointerUp(e)}
+      onPointerLeave={() => handlePointerUp()}
+      onPointerCancel={handlePointerCancel}
+      onClickCapture={handleClickCapture}
+    >
       <div
         ref={trackRef}
         className="flex gap-6 transition-transform duration-150 ease-out"
-        style={{ transform: `translateX(-${index * stepPx}px)` }}
+        style={{ transform: `translateX(${transformX}px)` }}
       >
         {news.map((n) => (
           <NewsCardItem key={n.id} n={n} isAdmin={isAdmin} />

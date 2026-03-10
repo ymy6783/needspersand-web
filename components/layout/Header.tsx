@@ -9,8 +9,7 @@ const NAV = [
   { label: "Vision & Strategy", href: "#vision" },
   { label: "What We Operate", href: "#operate" },
   { label: "News & Press", href: "#news" },
-  { label: "Partners", href: "#partners" },
-  { label: "Contact", href: "#contact" },
+  { label: "Timeline", href: "#timeline" },
 ];
 
 export default function Header() {
@@ -23,6 +22,21 @@ export default function Header() {
     if (isMain) {
       e.preventDefault();
       window.location.reload();
+    }
+  };
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    setOpen(false);
+    if (!href.startsWith("#")) return;
+    const id = href.slice(1);
+    if (!isMain) {
+      window.location.href = `/${href}`;
+      return;
+    }
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -76,7 +90,12 @@ export default function Header() {
         {/* Desktop nav: 1120px 이상에서만 보이기 */}
         <nav className="hidden items-center gap-14 text-[15px] text-neutral-800 min-[1120px]:flex">
           {NAV.map((item) => (
-            <a key={item.label} href={item.href} className="hover:opacity-70">
+            <a
+              key={item.label}
+              href={item.href}
+              onClick={(e) => (isMain ? handleNavClick(e, item.href) : undefined)}
+              className="hover:opacity-70"
+            >
               {item.label}
             </a>
           ))}
@@ -128,7 +147,7 @@ export default function Header() {
                 <a
                   key={item.label}
                   href={item.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => handleNavClick(e, item.href)}
                   className="rounded-lg px-2 py-2 hover:bg-black/5"
                 >
                   {item.label}
